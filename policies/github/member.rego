@@ -71,3 +71,44 @@ stale_admin_found[mem] := true {
 	mem.last_active != -1
 	memberUtils.isStale(mem.last_active, 6)
 }
+
+# METADATA
+# scope: rule
+# title: Collaborator is using a personal email
+# description: A collaborator is registered with a personal email, which could cause permission conflicts and lack of governance. The collaborator might have access to the code after termination.
+# custom:
+#   requiredEnrichers: [entityId, violatedUsers]
+#   remediationSteps:
+#     - 1. If supported by the SCM, ask the user to change their account to use the work email
+#     - 2. Otherwise, remove the user account and create a new user for the collaborator using the work email with the appropriate permissions.
+#     - 3. Delete the old collaborator user and revoke all of its permissions
+#   severity: MEDIUM
+#   requiredScopes: [admin:org]
+#   threat:
+#     - Private emails often have weaker security, risking data breaches and unauthorized access
+default collaborator_using_personal_email := false
+collaborator_using_personal_email := true {
+    some member
+    collaborator_domain := split(input.members[member].user.email, "@")[1]
+    personal_email_providers := [
+                                 "amazon.com",
+                                 "buffalo.edu",
+                                 "case.edu",
+                                 "example.com",
+                                 "gmail.com",
+                                 "hexion.com",
+                                 "hotmail.com",
+                                 "infosys.com",
+                                 "kbr.sh",
+                                 "lakeforest.edu",
+                                 "mavens.com",
+                                 "microsoft.com",
+                                 "oracle.com",
+                                 "outlook.com",
+                                 "protonmail.com",
+                                 "rocketmiles.com",
+                                 "yahoo.com"
+                             ]
+       collaborator_domain == personal_email_providers[_]
+
+}

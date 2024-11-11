@@ -58,7 +58,7 @@ default stale_admin_found := true
 
 stale_admin_found := false {
 	input.is_admin == true
-	not is_null(input.last_sign_in_at)
+	is_not null(input.last_sign_in_at)
 	ns := time.parse_rfc3339_ns(input.last_sign_in_at)
 	not isStale(ns, 6)
 }
