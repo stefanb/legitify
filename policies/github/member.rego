@@ -86,7 +86,7 @@ stale_admin_found[mem] := true {
 #   requiredScopes: [admin:org]
 #   threat:
 #     - Private emails often have weaker security, risking data breaches and unauthorized access
-collaborator_using_personal_email := true {
+collaborator_using_personal_email := false {
     some member
     collaborator_domain := split(input.members[member].user.email, "@")[1]
     personal_email_providers := [
