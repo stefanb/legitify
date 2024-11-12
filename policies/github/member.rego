@@ -91,23 +91,23 @@ collaborator_using_personal_email := true {
     some member
     collaborator_domain := split(input.members[member].user.email, "@")[1]
     personal_email_providers := {
-        "amazon.com",
-        "buffalo.edu",
-        "case.edu",
-        "example.com",
-        "gmail.com",
-        "hexion.com",
-        "hotmail.com",
-        "infosys.com",
-        "kbr.sh",
-        "lakeforest.edu",
-        "mavens.com",
-        "microsoft.com",
-        "oracle.com",
-        "outlook.com",
-        "protonmail.com",
-        "rocketmiles.com",
-        "yahoo.com"
+       "amazon.com",
+               "buffalo.edu",
+               "case.edu",
+               "example.com",
+               "gmail.com",
+               "hexion.com",
+               "hotmail.com",
+               "infosys.com",
+               "kbr.sh",
+               "lakeforest.edu",
+               "mavens.com",
+               "microsoft.com",
+               "oracle.com",
+               "outlook.com",
+               "protonmail.com",
+               "rocketmiles.com",
+               "yahoo.com"
     }
     collaborator_domain == personal_email_providers[_]
 }
