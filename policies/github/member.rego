@@ -47,8 +47,7 @@ stale_member_found[mem] := true {
 	mem.last_active != -1
 	memberUtils.isStale(mem.last_active, 6)
 }
-
-# METADATA
+ #METADATA
 # scope: rule
 # title: Organization Admins Should Have Activity In The Last 6 Months
 # description: A member with organizational admin permissions did not perform any action in the last 6 months. Admin users are extremely powerful and common compliance standards demand keeping the number of admins to a minimum. Consider revoking this member’s admin credentials by downgrading to regular user or removing the user completely.
@@ -86,28 +85,29 @@ stale_admin_found[mem] := true {
 #   requiredScopes: [admin:org]
 #   threat:
 #     - Private emails often have weaker security, risking data breaches and unauthorized access
-collaborator_using_personal_email := false {
+
+default collaborator_using_personal_email := false
+collaborator_using_personal_email := true {
     some member
     collaborator_domain := split(input.members[member].user.email, "@")[1]
-    personal_email_providers := [
-                                 "amazon.com",
-                                 "buffalo.edu",
-                                 "case.edu",
-                                 "example.com",
-                                 "gmail.com",
-                                 "hexion.com",
-                                 "hotmail.com",
-                                 "infosys.com",
-                                 "kbr.sh",
-                                 "lakeforest.edu",
-                                 "mavens.com",
-                                 "microsoft.com",
-                                 "oracle.com",
-                                 "outlook.com",
-                                 "protonmail.com",
-                                 "rocketmiles.com",
-                                 "yahoo.com"
-                             ]
-       collaborator_domain == personal_email_providers[_]
-
+    personal_email_providers := {
+        "amazon.com",
+        "buffalo.edu",
+        "case.edu",
+        "example.com",
+        "gmail.com",
+        "hexion.com",
+        "hotmail.com",
+        "infosys.com",
+        "kbr.sh",
+        "lakeforest.edu",
+        "mavens.com",
+        "microsoft.com",
+        "oracle.com",
+        "outlook.com",
+        "protonmail.com",
+        "rocketmiles.com",
+        "yahoo.com"
+    }
+    collaborator_domain == personal_email_providers[_]
 }
