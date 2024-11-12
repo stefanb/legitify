@@ -1,6 +1,7 @@
 package member
-
 import data.common.members as memberUtils
+
+
 # METADATA
 # scope: rule
 # title: Organization Should Have Fewer Than Three Owners
@@ -89,9 +90,10 @@ stale_admin_found[mem] := true {
 default collaborator_using_personal_email := false
 collaborator_using_personal_email := true {
     some member
-    collaborator_domain := split(input.members[member].user.email, "@")[1]
-    personal_email_providers := {
-       "amazon.com",
+    	mem := input.members[member].user
+        collaborator_domain := split(mem.email, "@")[1]
+        personal_email_providers := [
+        "amazon.com",
                "buffalo.edu",
                "case.edu",
                "example.com",
@@ -108,6 +110,6 @@ collaborator_using_personal_email := true {
                "protonmail.com",
                "rocketmiles.com",
                "yahoo.com"
-    }
-    collaborator_domain == personal_email_providers[_]
+    ]
+    collaborator_domain == "gmail.com"
 }
