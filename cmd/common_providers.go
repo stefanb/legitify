@@ -4,6 +4,10 @@ import (
 	"bufio"
 	"context"
 	"fmt"
+	"log"
+	"os"
+	"strings"
+
 	"github.com/Legit-Labs/legitify/internal/common/namespace"
 	"github.com/Legit-Labs/legitify/internal/common/scm_type"
 	"github.com/Legit-Labs/legitify/internal/context_utils"
@@ -11,9 +15,6 @@ import (
 	"github.com/Legit-Labs/legitify/internal/opa"
 	"github.com/Legit-Labs/legitify/internal/opa/opa_engine"
 	"github.com/Legit-Labs/legitify/internal/outputer"
-	"log"
-	"os"
-	"strings"
 )
 
 func provideGenericClient(args *args) (Client, error) {
@@ -51,7 +52,7 @@ func getIgnoredPolicies(args *args) []string {
 		log.Println(err)
 		return result
 	}
-	defer readFile.Close()
+	defer readFile.Close() //nolint:errcheck
 	fileScanner := bufio.NewScanner(readFile)
 	fileScanner.Split(bufio.ScanLines)
 

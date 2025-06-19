@@ -3,12 +3,13 @@ package github
 import (
 	"context"
 	"fmt"
+	"log"
+	"net/http"
+
 	"github.com/Legit-Labs/legitify/internal/collectors"
 	"github.com/Legit-Labs/legitify/internal/common/types"
 	"github.com/Legit-Labs/legitify/internal/context_utils"
 	"github.com/Legit-Labs/legitify/internal/scorecard"
-	"log"
-	"net/http"
 
 	"github.com/Legit-Labs/legitify/internal/common/group_waiter"
 	"github.com/Legit-Labs/legitify/internal/common/permissions"
@@ -343,7 +344,7 @@ func (rc *repositoryCollector) withActionsSettings(repo ghcollected.Repository, 
 func (rc *repositoryCollector) withRepositoryHooks(repo ghcollected.Repository, org string) ghcollected.Repository {
 	res, err := pagination.New[*github.Hook](rc.Client.Client().Repositories.ListHooks, nil).Sync(rc.Context, org, repo.Repository.Name)
 	if err != nil {
-		if res.Resp.Response.StatusCode == http.StatusNotFound {
+		if res.Resp.StatusCode == http.StatusNotFound {
 			perm := collectors.NewMissingPermission(permissions.RepoHookRead, collectors.FullRepoName(org, repo.Repository.Name),
 				"Cannot read repository webhooks", namespace.Repository)
 			rc.IssueMissingPermissions(perm)
@@ -406,7 +407,7 @@ func (rc *repositoryCollector) withSecrets(repository ghcollected.Repository, lo
 	for i := 0; i < len(secrets.Secrets); i++ {
 		repoSecrets = append(repoSecrets, &ghcollected.RepositorySecret{
 			Name:      secrets.Secrets[i].Name,
-			UpdatedAt: int(secrets.Secrets[i].UpdatedAt.Time.UnixNano()),
+			UpdatedAt: int(secrets.Secrets[i].UpdatedAt.UnixNano()),
 		})
 	}
 	repository.RepoSecrets = repoSecrets
@@ -414,7 +415,7 @@ func (rc *repositoryCollector) withSecrets(repository ghcollected.Repository, lo
 }
 
 func (rc *repositoryCollector) withSecurityAndAnalysis(repo ghcollected.Repository, login string) (ghcollected.Repository, error) {
-	
+
 	securityAndAnalysis, err := rc.Client.GetSecurityAndAnalysisForRepository(repo.Name(), login)
 	if err != nil {
 		return repo, err
@@ -482,7 +483,7 @@ func (rc *repositoryCollector) checkMissingPermissions(repo ghcollected.Reposito
 	return missingPermissions
 }
 
-func checkRepoAdminPermission(roles []permissions.RepositoryRole) bool{
+func checkRepoAdminPermission(roles []permissions.RepositoryRole) bool {
 	for _, role := range roles {
 		if (permissions.IsRepositoryRole(role) && role == permissions.RepoRoleAdmin) ||
 			(permissions.IsOrgRole(role) && role == permissions.OrgRoleOwner) {

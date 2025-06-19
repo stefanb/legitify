@@ -73,6 +73,10 @@ func executeConvertCommand(cmd *cobra.Command, _args []string) error {
 		return fmt.Errorf("failed to format: %v", err)
 	}
 
-	os.Stdout.Write(output)
+	_, err = os.Stdout.Write(output)
+	if err != nil {
+		return fmt.Errorf("failed to write output: %v", err)
+	}
+
 	return nil
 }
