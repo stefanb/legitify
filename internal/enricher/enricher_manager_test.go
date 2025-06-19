@@ -33,7 +33,7 @@ func arrangeEnricher(t *testing.T) EnricherTestRequires {
 
 func arbitraryEntity() collected.Entity {
 	var entityID int64 = 666
-	var entityName string = "arbitrary"
+	var entityName = "arbitrary"
 
 	e := githubcollected.Organization{
 		Organization: &githubcollected.ExtendedOrg{

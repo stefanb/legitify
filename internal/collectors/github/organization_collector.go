@@ -108,7 +108,7 @@ func (c *organizationCollector) collectExtraData(org *ghcollected.ExtendedOrg) g
 func (c *organizationCollector) collectOrgWebhooks(org string) ([]*github.Hook, error) {
 	res, err := pagination.New[*github.Hook](c.Client.Client().Organizations.ListHooks, nil).Sync(c.Context, org)
 	if err != nil {
-		if res.Resp.Response.StatusCode == http.StatusNotFound {
+		if res.Resp.StatusCode == http.StatusNotFound {
 			perm := collectors.NewMissingPermission(permissions.OrgHookAdmin, org,
 				"Cannot read organization webhooks", namespace.Organization)
 			c.IssueMissingPermissions(perm)
@@ -145,7 +145,7 @@ func (c *organizationCollector) collectOrgSecrets(org string) ([]*ghcollected.Or
 	for i := 0; i < len(secrets.Secrets); i++ {
 		orgSecrets = append(orgSecrets, &ghcollected.OrganizationSecret{
 			Name:      secrets.Secrets[i].Name,
-			UpdatedAt: int(secrets.Secrets[i].UpdatedAt.Time.UnixNano())})
+			UpdatedAt: int(secrets.Secrets[i].UpdatedAt.UnixNano())})
 	}
 
 	return orgSecrets, nil

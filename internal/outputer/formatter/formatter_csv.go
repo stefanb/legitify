@@ -1,13 +1,13 @@
 package formatter
 
 import (
-	"encoding/csv"
 	"bytes"
+	"encoding/csv"
 	"fmt"
-	"strconv"
-	"strings"
 	"github.com/Legit-Labs/legitify/internal/analyzers"
 	"github.com/Legit-Labs/legitify/internal/outputer/scheme"
+	"strconv"
+	"strings"
 )
 
 type CsvFormatter struct {
@@ -27,11 +27,11 @@ func (f *CsvFormatter) csvFailedPolicies(output *scheme.Flattened, csvwriter *cs
 	if err != nil {
 		panic(err)
 	}
-	
+
 	for i, policyName := range failedPolicies.AsOrderedMap().Keys() {
 		policyData := output.GetPolicyData(policyName)
 		policyInfo := policyData.PolicyInfo
-		rowNum := i+1
+		rowNum := i + 1
 		policyName := policyInfo.PolicyName
 		Namespace := policyInfo.Namespace
 		Severity := policyInfo.Severity
@@ -60,17 +60,15 @@ func (f *CsvFormatter) csvFailedPolicies(output *scheme.Flattened, csvwriter *cs
 		panic(err)
 	}
 
-
 	return true
 }
-
 
 func (f *CsvFormatter) formatSummary(output *scheme.Flattened, csvwriter *csv.Writer) bool {
 	headers := []string{"#", "Namespace", "Policy", "Severity", "Passed", "Failed", "Skipped"}
 	err := csvwriter.Write(headers)
 
 	for i, policyName := range output.AsOrderedMap().Keys() {
-		rowNum := i+1
+		rowNum := i + 1
 		data := output.GetPolicyData(policyName)
 		policyInfo := data.PolicyInfo
 		title := policyInfo.Title
@@ -88,7 +86,6 @@ func (f *CsvFormatter) formatSummary(output *scheme.Flattened, csvwriter *csv.Wr
 				skipped++
 			}
 		}
-
 
 		row := []string{strconv.Itoa(rowNum), namespace, title, severity, strconv.Itoa(passed), strconv.Itoa(failed), strconv.Itoa(skipped)}
 		err := csvwriter.Write(row)

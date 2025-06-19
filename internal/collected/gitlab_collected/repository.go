@@ -21,7 +21,7 @@ func (r Repository) ViolationEntityType() string {
 }
 
 func (r Repository) CanonicalLink() string {
-	return r.Project.WebURL
+	return r.WebURL
 }
 
 func (r Repository) Name() string {

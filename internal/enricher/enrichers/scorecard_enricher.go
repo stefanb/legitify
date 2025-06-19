@@ -123,8 +123,8 @@ func (se ScorecardEnrichment) HumanReadable(prepend string, linebreak string) st
 		if len(checkResult.Details) > 0 {
 			sb.WriteStringf("details: %s", linebreak)
 			for i, detail := range checkResult.Details {
-				clean := strings.Replace(detail, "\t", "", -1)
-				clean = strings.Replace(clean, "\n", " ", -1)
+				clean := strings.ReplaceAll(detail, "\t", "")
+				clean = strings.ReplaceAll(clean, "\n", " ")
 				sb.WriteStringf("  %d. %s%s", i+1, clean, linebreak)
 			}
 		}
